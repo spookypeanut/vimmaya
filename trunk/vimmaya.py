@@ -1,0 +1,148 @@
+import vim
+import string
+import time
+import os
+from threading import Thread
+import socket
+
+_scratchname = "~/mayascratch.mel"
+_buffername = "MayaOutput"
+_init = False
+_maya = None
+_buffer = None
+_listenthread = None
+_hostname = "localhost"
+_portnum = 7092
+
+class PortListener(Thread):
+	def __init__ (self):
+		Thread.__init__(self)
+	def run(self):
+		global _init
+		while _init:
+			MayaRefreshBuffer()
+			vim.command("redraw")
+			time.sleep(1)
+
+def MayaQuit():
+	global _init
+	_init = False
+
+def MayaInit():
+	global _maya
+	global _init
+	global _portnum
+	global _hostname
+
+	_maya = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		_maya.connect((_hostname, _portnum))
+
+	except socket.error, e:
+		return
+	_init = True
+
+def MayaSubmitIt(txt):
+	if not _init:
+		return
+	CreateMayaBuffer()
+	_maya.send(txt)
+
+def SwitchWindow(newbuffer):
+	newname = newbuffer.name
+	for i in range(0, len(vim.windows)):
+		if vim.windows[i].buffer == newbuffer:
+			cmd = "exe " + str(i + 1) + " . \"wincmd w\""
+			vim.command(cmd)
+			print cmd
+			break
+
+def MayaRefreshBuffer():
+	if not _init or not _buffer:
+		return
+
+	tempbuffer = _maya.recv(4096)
+	if tempbuffer:
+		oldbuff = vim.current.buffer
+		SwitchWindow(_buffer)
+
+		vim.command("setlocal modifiable")
+		vim.current.buffer.append(CleanOutput(tempbuffer))
+
+		vim.command("setlocal nomodifiable")
+		MayaFindBufferEnd()
+		SwitchWindow(oldbuff)
+
+def CleanOutput(dirtyoutput):
+	global _hostname
+	global _portnum
+	mylist = string.split(dirtyoutput.split("\0", 1)[0], '\n')
+	mylist[len(mylist) - 1] = mylist[len(mylist) - 1][:-1]
+	alllines = filter(lambda i: i != '' and i != ';' and i != '// WARNING: unknown result type', mylist)
+	returnlist = []
+	for line in mylist:
+		#portnumstart = "(" + _hostname + ":" + str(_portnum) + ") "
+		#if line.startsWith(portnumstart):
+			#line = line[len(portnumstart):]
+		returnlist.append(line)
+
+	return returnlist
+
+def MayaFindBufferEnd():
+	global _buffer
+	for i in vim.windows:
+		if i.buffer == _buffer:
+			window = i
+
+	if not window:
+		return
+
+	window.cursor = (len(_buffer),0)
+
+def CreateMayaBuffer():
+	global _buffer
+	global _buffername
+	global _listenthread
+	
+	if not _buffer:
+		vim.command("split " + _buffername)
+		vim.command("setlocal buftype=nofile")
+		vim.command("setlocal nomodifiable")
+		vim.command("setlocal bufhidden=hide")
+		vim.command("setlocal noswapfile")
+		_buffer = vim.current.buffer
+		_listenthread = PortListener()
+		_listenthread.start()
+
+
+	mayawindow = None
+	for i in vim.windows:
+		if i.buffer == _buffer:
+			mayawindow = i
+
+	if mayawindow == None:
+		vim.command("sbuffer " + _buffername)
+
+	if mayawindow.height < 10:
+		mayawindow.height = 10
+
+def MayaTest():
+	_maya.send("confirmDialog -title \"Test from vim\" -message \"Maya is correctly connected to vim\" -button \"OK\" -defaultButton \"OK\" -cancelButton \"OK\"")
+
+def MayaScratch():
+	global _scratchname
+	vim.command("split " + _scratchname)
+#	vim.command("setlocal buftype=nofile")
+#	vim.command("setlocal bufhidden=hide")
+#	vim.command("setlocal noswapfile")
+
+def MayaLine():
+	line = vim.current.line + "\n"
+	MayaSubmitIt(line)
+
+def MayaRange():
+	range = vim.current.range
+	lines = ""
+	for line in range:
+		lines += line + "\n"
+	MayaSubmitIt(lines)
