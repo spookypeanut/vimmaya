@@ -89,6 +89,9 @@ def CleanOutput(dirtyoutput):
 		if line.startswith(portnumstart):
 			line = line[len(portnumstart):]
 		
+		if line.startswith(": "):
+			line = line[2:]
+		
 		returnlist.append(line)
 
 	return returnlist
