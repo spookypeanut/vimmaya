@@ -14,7 +14,7 @@ vmap ,m :python MayaRange()<CR>
 nmap ,m :python MayaLine()<CR>
 map ,MC :python MayaClear()<CR>
 map ,MQ :python MayaScratch()<CR>
-map ,MI :python MayaInit()<CR>
+map ,MI :python MayaInit()<CR>:python MayaTest()<CR>
 map ,MT :python MayaTest()<CR>
 map ,MS :python MayaSourceCurrent()<CR>
 

@@ -136,7 +136,9 @@ def CreateMayaBuffer():
 		mayawindow.height = 10
 
 def MayaTest():
-	_maya.send("confirmDialog -title \"Test from vim\" -message \"Maya is correctly connected to vim\" -button \"OK\" -defaultButton \"OK\" -cancelButton \"OK\"")
+	message = "Maya is correctly connected to vim"
+	MayaSubmitIt("confirmDialog -title \"Test from vim\" -message \"" + message + "\" -button \"OK\" -defaultButton \"OK\" -cancelButton \"OK\";")
+	MayaSubmitIt("print \"" + message + "\";")		# Why does this not work?
 
 def MayaScratch():
 	global _scratchname
