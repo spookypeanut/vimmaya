@@ -21,7 +21,6 @@ class PortListener(Thread):
 		global _init
 		while _init:
 			MayaRefreshBuffer()
-			vim.command("redraw")
 			time.sleep(1)
 
 def MayaQuit():
@@ -63,27 +62,33 @@ def MayaRefreshBuffer():
 
 	tempbuffer = _maya.recv(4096)
 	if tempbuffer:
-		oldbuff = vim.current.buffer
-		SwitchWindow(_buffer)
+		cleanbuffer = CleanOutput(tempbuffer)
+		if cleanbuffer:
+			oldbuff = vim.current.buffer
+			SwitchWindow(_buffer)
 
-		vim.command("setlocal modifiable")
-		vim.current.buffer.append(CleanOutput(tempbuffer))
+			vim.command("setlocal modifiable")
+			vim.current.buffer.append(cleanbuffer)
+			vim.command("setlocal nomodifiable")
 
-		vim.command("setlocal nomodifiable")
-		MayaFindBufferEnd()
-		SwitchWindow(oldbuff)
+			MayaFindBufferEnd()
+			SwitchWindow(oldbuff)
+
 
 def CleanOutput(dirtyoutput):
 	global _hostname
 	global _portnum
 	mylist = string.split(dirtyoutput.split("\0", 1)[0], '\n')
 	mylist[len(mylist) - 1] = mylist[len(mylist) - 1][:-1]
-	alllines = filter(lambda i: i != '' and i != ';' and i != '// WARNING: unknown result type', mylist)
 	returnlist = []
 	for line in mylist:
-		#portnumstart = "(" + _hostname + ":" + str(_portnum) + ") "
-		#if line.startsWith(portnumstart):
-			#line = line[len(portnumstart):]
+		if line == '' or line == "// WARNING: unknown result type" or line == ";":
+			continue
+
+		portnumstart = "(" + _hostname + ":" + str(_portnum) + ") "
+		if line.startswith(portnumstart):
+			line = line[len(portnumstart):]
+		
 		returnlist.append(line)
 
 	return returnlist
@@ -98,6 +103,7 @@ def MayaFindBufferEnd():
 		return
 
 	window.cursor = (len(_buffer),0)
+	vim.command("redraw")
 
 def CreateMayaBuffer():
 	global _buffer
@@ -132,9 +138,6 @@ def MayaTest():
 def MayaScratch():
 	global _scratchname
 	vim.command("split " + _scratchname)
-#	vim.command("setlocal buftype=nofile")
-#	vim.command("setlocal bufhidden=hide")
-#	vim.command("setlocal noswapfile")
 
 def MayaLine():
 	line = vim.current.line + "\n"
