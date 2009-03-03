@@ -146,6 +146,17 @@ def MayaLine():
 	line = vim.current.line + "\n"
 	MayaSubmitIt(line)
 
+def MayaClear():
+	global _buffer
+	oldbuff = vim.current.buffer
+	SwitchWindow(_buffer)
+
+	vim.command("setlocal modifiable")
+	_buffer[:] = None
+	vim.command("setlocal nomodifiable")
+
+	SwitchWindow(oldbuff)
+
 def MayaSourceCurrent():
 	filename = vim.current.buffer.name
 	MayaSubmitIt("source \"" + filename + "\";")
