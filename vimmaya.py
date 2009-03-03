@@ -146,6 +146,10 @@ def MayaLine():
 	line = vim.current.line + "\n"
 	MayaSubmitIt(line)
 
+def MayaSourceCurrent():
+	filename = vim.current.buffer.name
+	MayaSubmitIt("source \"" + filename + "\";")
+
 def MayaRange():
 	range = vim.current.range
 	lines = ""
