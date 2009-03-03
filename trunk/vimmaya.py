@@ -74,11 +74,11 @@ def MayaRefreshBuffer():
 			MayaFindBufferEnd()
 			SwitchWindow(oldbuff)
 
-
 def CleanOutput(dirtyoutput):
 	global _hostname
 	global _portnum
-	mylist = string.split(dirtyoutput.split("\0", 1)[0], '\n')
+
+	mylist = string.split(dirtyoutput.replace('\0', '\n'), '\n')
 	mylist[len(mylist) - 1] = mylist[len(mylist) - 1][:-1]
 	returnlist = []
 	for line in mylist:
