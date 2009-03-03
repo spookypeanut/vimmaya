@@ -8,11 +8,11 @@ pyfile ~/.vim/plugin/vimmaya.py
 
 " TODO: 
 " 		,MF (find function and split the file)
-"		,MC (clear history)
 "		,MO (open outliner?)
 
 vmap ,m :python MayaRange()<CR>
 nmap ,m :python MayaLine()<CR>
+map ,MC :python MayaClear()<CR>
 map ,MQ :python MayaScratch()<CR>
 map ,MI :python MayaInit()<CR>
 map ,MT :python MayaTest()<CR>
