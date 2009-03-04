@@ -1,0 +1,9 @@
+
+global proc vimcmdFindProc(string $procName) {
+	string $result = `whatIs fCameraLib_animCameraFromCache`;
+	string $melprocprefix = "Mel procedure found in: ";
+	if (startsWith($result, $melprocprefix)) {
+		$filename = substitute($melprocprefix, $result, "");
+		print ("\n<vimcmd>:sp " + $filename + "<vimcmd>\n");
+	}
+}
