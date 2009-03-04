@@ -1,0 +1,11 @@
+int $portnum = 7092;
+string $hostname = "localhost";
+
+string $cmd = ("commandPort -n \"" + $hostname + ":" + $portnum + "\" -echoOutput");
+if (catch (`evalEcho ($cmd)`)) {
+	string $HBmessage = ("Command port could not be opened on port " + $portnum);
+	string $monkey = `confirmDialog -message ( $HBmessage ) -button "that's fine" -button "whatever"`;
+}
+
+global proc vimmayaCmdPort () {
+}
