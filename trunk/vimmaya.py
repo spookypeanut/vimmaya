@@ -93,7 +93,7 @@ def CleanOutput(dirtyoutput):
 			line = line[2:]
 
 		if line.startswith("<vimcmd>"):
-			vim.command(line[8:-8])		# TODO Should really use regexp, but i'm too lazy
+			vim.command(line[8:-9])		# TODO Should really use regexp, but i'm too lazy
 			continue
 		
 		returnlist.append(line)
