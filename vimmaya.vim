@@ -19,7 +19,7 @@ vmap ,m :python MayaRange()<CR>
 nmap ,m :python MayaLine()<CR>
 map ,MC :python MayaClear()<CR>
 map ,MI :python MayaInit()<CR>:python MayaTest()<CR>
-map ,MP :python MayaSubmitIt("vimmayaFindProc ")
+map ,MP :python MayaSubmitIt("vimmayaFindProc ")<CR>
 map ,MQ :python MayaScratch()<CR>
 map ,MS :python MayaSourceCurrent()<CR>
 map ,MT :python MayaTest()<CR>

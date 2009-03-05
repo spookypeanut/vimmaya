@@ -1,9 +1,11 @@
 
 global proc vimmayaFindProc(string $procName) {
-	string $result = `whatIs fCameraLib_animCameraFromCache`;
+	string $result = `whatIs $procName`;
 	string $melprocprefix = "Mel procedure found in: ";
 	if (startsWith($result, $melprocprefix)) {
 		$filename = substitute($melprocprefix, $result, "");
-		print ("\n<vimcmd>:sp " + $filename + "<vimcmd>\n");
+		print ("\n<vimcmd>:sp " + $filename + "</vimcmd>\n");
+	} else {
+		print ("Procedure " + $procName + " is unknown\n");
 	}
 }
