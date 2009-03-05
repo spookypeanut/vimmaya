@@ -9,13 +9,17 @@ pyfile ~/.vim/plugin/vimmaya.py
 " TODO list
 "	load up help for a proc / keyword
 "	allow multi-line ifs, etc via range
-" 	,MF (find function and split the file)
-"	,MO (open outliner?)
+"	,MO (select object under cursor)
+"	get command port proc to check if one is already open
+"	make oo (BIG)
+"	command port proc should be able to open any port number
+" 	vim should be able to receive on any port number
 
 vmap ,m :python MayaRange()<CR>
 nmap ,m :python MayaLine()<CR>
 map ,MC :python MayaClear()<CR>
 map ,MI :python MayaInit()<CR>:python MayaTest()<CR>
+map ,MP :python MayaSubmitIt("vimmayaFindProc ")
 map ,MQ :python MayaScratch()<CR>
 map ,MS :python MayaSourceCurrent()<CR>
 map ,MT :python MayaTest()<CR>
