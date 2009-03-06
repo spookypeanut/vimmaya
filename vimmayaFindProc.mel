@@ -4,7 +4,7 @@ global proc vimmayaFindProc(string $procName) {
 	string $melprocprefix = "Mel procedure found in: ";
 	if (startsWith($result, $melprocprefix)) {
 		$filename = substitute($melprocprefix, $result, "");
-		print ("\n<vimcmd>:sp " + $filename + "</vimcmd>\n");
+		print ("\n<vimcmd>:sp +/^.*proc.*\\ "+$procName+"[\\ ]*(.*) " + $filename + "</vimcmd>\n");
 	} else {
 		print ("Procedure " + $procName + " is unknown\n");
 	}
