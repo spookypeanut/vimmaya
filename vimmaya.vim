@@ -31,4 +31,6 @@ map ,MT :python MayaTest()<CR>
 
 autocmd VimLeavePre * :python MayaQuit()
 
+au BufRead,BufNewFile MayaOutput set filetype=mayaoutput
+
 python MayaInit()
