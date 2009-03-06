@@ -7,12 +7,14 @@ let b:loaded_py_maya = 1
 pyfile ~/.vim/plugin/vimmaya.py
 
 " TODO list
-"	allow multi-line ifs, etc via range
-"	,MO (select object under cursor)
+"	Test that e.g. help, docs fuctions work
+"	Get the scratch buffer to auto-save
+"	allow multi-line ifs, etc via range: apparently this needs a temp file.  how rubbish is that.
 "	get command port proc to check if one is already open
 "	make oo (BIG)
 "	command port proc should be able to open any port number
 " 	vim should be able to receive on any port number
+"	position cursor when doing ,MP
 
 vmap ,m :python MayaRange()<CR>
 nmap ,m :python MayaLine()<CR>
@@ -20,6 +22,7 @@ map ,MC :python MayaClear()<CR>
 map ,MD :python MayaSubmitIt("help -doc \"\"")<CR>
 map ,MH :python MayaSubmitIt("help \"\"")<CR>
 map ,MI :python MayaInit()<CR>:python MayaTest()<CR>
+map ,MO :python MayaSubmitIt("select \"\"")<CR>
 map ,MP :python MayaSubmitIt("vimmayaFindProc \"\"")<CR>
 map ,MQ :python MayaScratch()<CR>
 map ,MS :python MayaSourceCurrent()<CR>
