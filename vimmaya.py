@@ -82,7 +82,7 @@ def CleanOutput(dirtyoutput):
 	mylist[len(mylist) - 1] = mylist[len(mylist) - 1][:-1]
 	returnlist = []
 	for line in mylist:
-		if line == '' or line == "// WARNING: unknown result type" or line == ";":
+		if line == '' or line == "// WARNING: unknown result type" or line == "// ERROR: unknown maya error" or line == ";":
 			continue
 
 		portnumstart = "(" + _hostname + ":" + str(_portnum) + ") "
@@ -141,8 +141,8 @@ def CreateMayaBuffer():
 
 def MayaTest():
 	message = "Maya is correctly connected to vim"
+	MayaSubmitIt("print \"" + message + "\";")
 	MayaSubmitIt("confirmDialog -title \"Test from vim\" -message \"" + message + "\" -button \"OK\" -defaultButton \"OK\" -cancelButton \"OK\";")
-	MayaSubmitIt("print \"" + message + "\";")		# Why does this not work?
 
 def MayaScratch():
 	global _scratchname

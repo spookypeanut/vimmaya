@@ -15,7 +15,6 @@ pyfile ~/.vim/plugin/vimmaya.py
 "	make oo (BIG)
 "	command port proc should be able to open any port number
 " 	vim should be able to receive on any port number
-"	get rid of '// ERROR: unknown maya error' too
 
 vmap ,m :python MayaRange()<CR>
 nmap ,m :python MayaLine()<CR>
@@ -26,6 +25,7 @@ map ,MI :python MayaInit()<CR>:python MayaTest()<CR>
 map ,MO :python MayaSubmitIt("select \"\"")<CR>
 map ,MP :python MayaSubmitIt("vimmayaFindProc \"\"")<CR>
 map ,MQ :python MayaScratch()<CR>
+map ,MR :python MayaSubmitIt("rehash; print \"Rehashed\\n\"")<CR>
 map ,MS :python MayaSourceCurrent()<CR>
 map ,MT :python MayaTest()<CR>
 
