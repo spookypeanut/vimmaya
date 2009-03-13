@@ -7,6 +7,7 @@ let b:loaded_py_maya = 1
 pyfile ~/.vim/plugin/vimmaya.py
 
 " TODO list
+"	Figure out why increasing the size of the output window gives an error
 "	Highlighting for maya output
 "	Test that e.g. help, docs fuctions work
 "	Get the scratch buffer to auto-save
