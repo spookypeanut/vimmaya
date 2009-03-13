@@ -126,6 +126,7 @@ def CreateMayaBuffer():
 		_buffer = vim.current.buffer
 		_listenthread = PortListener()
 		_listenthread.start()
+		vim.command("redraw!")
 
 
 	mayawindow = None
@@ -135,6 +136,7 @@ def CreateMayaBuffer():
 
 	if mayawindow == None:
 		vim.command("sbuffer " + _buffername)
+		vim.command("redraw!")
 
 	if mayawindow.height < 10:
 		mayawindow.height = 10
