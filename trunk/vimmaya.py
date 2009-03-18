@@ -2,6 +2,7 @@ import vim
 import string
 import time
 import os
+import tempfile
 from threading import Thread
 import socket
 
@@ -53,7 +54,7 @@ def SwitchWindow(newbuffer):
 		if vim.windows[i].buffer == newbuffer:
 			cmd = "exe " + str(i + 1) + " . \"wincmd w\""
 			vim.command(cmd)
-			print cmd
+			#print cmd
 			break
 
 def MayaRefreshBuffer():
@@ -167,6 +168,7 @@ def MayaClear():
 
 def MayaSourceCurrent():
 	filename = vim.current.buffer.name
+	MayaSubmitIt("print (\"Sourcing " + filename + "\\n\");")
 	MayaSubmitIt("source \"" + filename + "\";")
 
 def MayaRange():
@@ -174,4 +176,7 @@ def MayaRange():
 	lines = ""
 	for line in range:
 		lines += line + "\n"
+	#rangetemp = tempfile.TemporaryFile()
+	#rangetemp.writelines(lines)
+
 	MayaSubmitIt(lines)
