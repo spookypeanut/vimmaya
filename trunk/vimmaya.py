@@ -54,7 +54,6 @@ def SwitchWindow(newbuffer):
 		if vim.windows[i].buffer == newbuffer:
 			cmd = "exe " + str(i + 1) + " . \"wincmd w\""
 			vim.command(cmd)
-			#print cmd
 			break
 
 def MayaRefreshBuffer():
@@ -176,7 +175,9 @@ def MayaRange():
 	lines = ""
 	for line in range:
 		lines += line + "\n"
-	#rangetemp = tempfile.TemporaryFile()
-	#rangetemp.writelines(lines)
+	tempnum, tempname = tempfile.mkstemp()
+	os.write(tempnum, lines)
+	MayaSubmitIt("source \"" + tempname + "\";")
+	# We have to do it this way, otherwise the file is gone before Maya gets it
+	MayaSubmitIt("print \"<vimcmd>python os.unlink(\\\"" + tempname + "\\\")</vimcmd>\"")
 
-	MayaSubmitIt(lines)

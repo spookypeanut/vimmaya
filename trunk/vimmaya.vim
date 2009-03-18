@@ -11,7 +11,6 @@ pyfile ~/.vim/plugin/vimmaya.py
 "	Highlighting for maya output
 "	Test that e.g. help, docs fuctions work
 "	Get the scratch buffer to auto-save
-"	allow multi-line ifs, etc via range: apparently this needs a temp file.  how rubbish is that.
 "	get command port proc to check if one is already open
 "	make oo (BIG)
 "	command port proc should be able to open any port number
@@ -36,7 +35,7 @@ map ,mp :python MayaSubmitIt("vimmayaFindProc \"\"")<CR>
 map ,mq :python MayaScratch()<CR>
 " ,mr	Rehash
 map ,mr :python MayaSubmitIt("rehash; print \"Rehashed\\n\"")<CR>
-" ,ms	Source the current buffer
+" ,ms	Source the current buffer (nb: file must be saved)
 map ,ms :python MayaSourceCurrent()<CR>
 " ,mt	Test connection to Maya (pops up a window, and prints to output window)
 map ,mt :python MayaTest()<CR>
