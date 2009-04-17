@@ -8,6 +8,7 @@ pyfile ~/.vim/plugin/vimmaya.py
 
 " TODO list
 "	Figure out why increasing the size of the output window gives an error
+"	Source all open .mel buffers (except scratch?)
 "	Highlighting for maya output
 "	Test that e.g. help, docs fuctions work
 "	Get the scratch buffer to auto-save
@@ -26,7 +27,7 @@ map ,md :python MayaSubmitIt("help -doc \"\"")<CR>
 " ,mh	Get help for proc under cursor
 map ,mh :python MayaSubmitIt("help \"\"")<CR>
 " ,mi	Initialize plugin
-map ,mi :python MayaInit()<CR>:python MayaTest()<CR>
+map ,mi :python MayaScratch()<CR>:python MayaInit()<CR>:python MayaTest()<CR>
 " ,mo	Select object under cursor
 map ,mo :python MayaSubmitIt("select \"\"")<CR>
 " ,mp	Open file containing proc under cursor in a new window
