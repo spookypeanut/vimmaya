@@ -7,22 +7,28 @@ from threading import Thread
 import socket
 
 _scratchname = "~/mayascratch.mel"
+_scratchbuffer = None
 _buffername = "MayaOutput"
 _init = False
 _maya = None
 _buffer = None
 _listenthread = None
 _hostname = "localhost"
+_portnumarray = [7092, 7093, 7094, 7095]
 _portnum = 7092
+_buffersize = 4096 
+_sleeptime = 0.1 # in seconds
+
 
 class PortListener(Thread):
 	def __init__ (self):
 		Thread.__init__(self)
 	def run(self):
 		global _init
+		global _sleeptime
 		while _init:
 			MayaRefreshBuffer()
-			time.sleep(1)
+			time.sleep(_sleeptime)
 
 def MayaQuit():
 	global _init
@@ -32,14 +38,32 @@ def MayaInit():
 	global _maya
 	global _init
 	global _portnum
+	global _portnumarray
 	global _hostname
 
 	_maya = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 	try:
 		_maya.connect((_hostname, _portnum))
-
 	except socket.error, e:
 		return
+
+	# I know, horrible hacky way to do multi-line comments...
+	'''
+	for eachport in _portnumarray:
+		#print "Trying" + str(eachport)
+		try:
+			_maya.connect((_hostname, eachport))
+		except socket.error, e:
+			continue
+		teststring = "vimmayaPortTest"
+		_maya.send("print \"" + teststring + "\"")
+		time.sleep(.1)
+		tempbuffer = _maya.recv(64)
+		if teststring == tempbuffer.split()[2].strip():
+			_portnum = eachport
+			break'''
+			
 	_init = True
 
 def MayaSubmitIt(txt):
@@ -60,7 +84,8 @@ def MayaRefreshBuffer():
 	if not _init or not _buffer:
 		return
 
-	tempbuffer = _maya.recv(4096)
+	global _buffersize
+	tempbuffer = _maya.recv(_buffersize)
 	if tempbuffer:
 		cleanbuffer = CleanOutput(tempbuffer)
 		if cleanbuffer:
@@ -73,6 +98,7 @@ def MayaRefreshBuffer():
 
 			MayaFindBufferEnd()
 			SwitchWindow(oldbuff)
+			vim.command("redraw")
 
 def CleanOutput(dirtyoutput):
 	global _hostname
@@ -148,7 +174,20 @@ def MayaTest():
 
 def MayaScratch():
 	global _scratchname
-	vim.command("split " + _scratchname)
+	global _scratchbuffer
+
+	if not _scratchbuffer:
+		vim.command("split " + _scratchname)
+		_scratchbuffer = vim.current.buffer
+
+	mayawindow = None
+	for i in vim.windows:
+		if i.buffer == _scratchbuffer:
+			mayawindow = i
+
+	if mayawindow == None:
+		vim.command("sbuffer " + _scratchname)
+		vim.command("redraw!")
 
 def MayaLine():
 	line = vim.current.line + "\n"
