@@ -230,9 +230,12 @@ def MayaClear():
     SwitchWindow(oldbuff)
 
 def MayaSourceCurrent():
-    filename = vim.current.buffer.name
-    MayaSubmitIt("print (\"Sourcing " + filename + "\\n\");")
-    MayaSubmitIt("source \"" + filename + "\";")
+    global _scratchbuffer
+    global _buffer
+    if vim.current.buffer != _buffer and vim.current.buffer != _scratchbuffer:
+        filename = vim.current.buffer.name
+        MayaSubmitIt("print (\"Sourcing " + filename + "\\n\");")
+        MayaSubmitIt("source \"" + filename + "\";")
 
 def MayaRange():
     range = vim.current.range
