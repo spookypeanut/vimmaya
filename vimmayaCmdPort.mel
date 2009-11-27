@@ -1,3 +1,24 @@
+global proc vimmayaMultiCmdPort() {
+	int $portnumarray[] = {7092, 7093, 7094, 7095};
+	//int $portnumarray[] = {7092};
+	int $portnum, $finalnum = 0;
+	string $hostname = "localhost";
+
+	for ($portnum in $portnumarray) {
+		string $cmd = ("commandPort -n \"" + $hostname + ":" + $portnum + "\" -echoOutput");
+		if (!catch (`evalEcho ($cmd)`)) {
+			$finalnum = $portnum;
+			break;
+		}
+	}
+	if (0 == $finalnum) {
+		string $HBmessage = ("Command port could not be opened");
+		string $monkey = `confirmDialog -message ( $HBmessage ) -button "that's fine" -button "whatever"`;
+	} else {
+		print ("Command port opened for vim on " + $finalnum + "\n");
+	}
+}
+
 global proc vimmayaOpenCmdPort() {
 	//int $portnumarray[] = {7092, 7093, 7094, 7095};
 	int $portnumarray[] = {7092};

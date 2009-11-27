@@ -20,6 +20,7 @@ pyfile ~/.vim/plugin/vimmaya.py
 " ,mm	Submit current line / selected range
 vmap ,mm :python MayaRange()<CR>
 nmap ,mm :python MayaLine()<CR>
+
 " ,mc	Clear output window
 map ,mc :python MayaClear()<CR>
 " ,md	Open proc under cursor in Maya documentation
@@ -28,6 +29,10 @@ map ,md :python MayaSubmitIt("help -doc \"\"")<CR>
 map ,mh :python MayaSubmitIt("help \"\"")<CR>
 " ,mi	Initialize plugin
 map ,mi :python MayaScratch()<CR>:python MayaInit()<CR>:python MayaTest()<CR>
+" ,mj	Initialize plugin
+map ,mj :python MayaScratch()<CR>:python MayaJinit()<CR>:python MayaTest()<CR>
+" ,mn	Get a new scene file (dangerous)
+map ,mn :python MayaSubmitIt("file -f -new")<CR>
 " ,mo	Select object under cursor
 map ,mo :python MayaSubmitIt("select \"\"")<CR>
 " ,mp	Open file containing proc under cursor in a new window
@@ -40,6 +45,8 @@ map ,mr :python MayaSubmitIt("rehash; print \"Rehashed\\n\"")<CR>
 map ,ms :python MayaSourceCurrent()<CR>
 " ,mt	Test connection to Maya (pops up a window, and prints to output window)
 map ,mt :python MayaTest()<CR>
+" ,ma	Echo all commands
+map ,ma :python MayaSubmitIt("vimmayaToggleEchoAll();")<CR>
 
 autocmd VimLeavePre * :python MayaQuit()
 
